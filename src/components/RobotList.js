@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import AssignTasks from "./AssignTasks";
-import TaskList from "./TaskList";
+import TasksList from "./TasksList";
 
 const RobotList = (props) => {
   const robots = props.robots;
@@ -10,15 +10,15 @@ const RobotList = (props) => {
   const [robot, setRobot] = useState({});
 
   const showAssignTasks = (e, robot) => {
+    setRobot(robot);
     setTaskTrigger(false);
     setAssignTrigger(true);
-    setRobot(robot);
   };
 
   const showTasksDetails = (e, robot) => {
-    setTaskTrigger(true);
-    setAssignTrigger(false);
     setRobot(robot);
+    // if (robot.tasks.length > 0) setTaskTrigger(true);
+    setAssignTrigger(false);
   };
 
   return (
@@ -52,10 +52,15 @@ const RobotList = (props) => {
         assignTrigger={assignTrigger}
         robot={robot}
         setAssignTrigger={setAssignTrigger}
+        setRobot={setRobot}
       />
       <div>
         {taskTrigger ? (
-          <TaskList taskTrigger={taskTrigger} robot={robot} />
+          <TasksList
+            taskTrigger={taskTrigger}
+            robot={robot}
+            setRobot={setRobot}
+          />
         ) : null}
       </div>
     </div>

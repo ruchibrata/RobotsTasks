@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useMergeState } from "use-merge-state";
 
 import "../css/AssignTasks.css";
 
@@ -47,8 +48,8 @@ const tasks = [
 
 function AssignTasks(props) {
   const [RobotTasks, setRobotTasks] = useState([]);
-  const [currentRobot, setCurrentRobot] = useState("");
-  const [addTasks, setAddTasks] = useState(false);
+  const [currentRobot, setCurrentRobot] = useMergeState({});
+  const [tasksAdded, setTasksAdded] = useState(false);
   const [task1, setTask1] = useState("");
   const [task2, setTask2] = useState("");
   const [task3, setTask3] = useState("");
@@ -56,15 +57,8 @@ function AssignTasks(props) {
   const [task5, setTask5] = useState("");
 
   useEffect(() => {
-    (async () => {
-      if (addTasks) {
-        console.log("add the tasks");
-        setCurrentRobot({ ...currentRobot, tasks: RobotTasks });
-      }
-      const robot1 = await setCurrentRobot(props.robot);
-      console.log("robot with tasks list: ", robot1);
-    })();
-  });
+    setCurrentRobot(props.robot);
+  }, [setCurrentRobot, props.robot]);
 
   const handleChange = (e) => {
     let taskIdx = e.target.value;
@@ -124,19 +118,29 @@ function AssignTasks(props) {
     // console.log("task2:", task4);
     // console.log("task2:", task5);
     setRobotTasks([task1, task2, task3, task4, task5]);
-    console.log(RobotTasks);
-    setAddTasks(true);
-    props.setAssignTrigger(false);
+    // props.setAssignTrigger(false);
   };
+
+  const checkTasksAdded = () => {
+    if (RobotTasks.length > 0) {
+      setTasksAdded(true);
+      props.setRobot({ ...currentRobot, task: RobotTasks });
+      console.log(currentRobot);
+    }
+  };
+
   console.log(props);
 
   return props.assignTrigger ? (
-    <form>
+    <div>
       <div className="assignTasks">
         <h2>Assign 5 tasks for </h2>
         <h3>Robot Name : {props.robot.name} </h3>
         <h3>Robot Type : {props.robot.type}</h3>
-
+        <h4>
+          Check it out if the tasks get assigned on clicking the Check
+          button,otherwise assign again.
+        </h4>
         <p>
           <label>Choose Task 1 : </label>
           <select id="1" onChange={(e) => handleChange(e)}>
@@ -193,13 +197,30 @@ function AssignTasks(props) {
           </select>
         </p>
         <p>
-          <button type="submit" onClick={(e) => assignTasks(e)}>
+          <button id="submit" type="submit" onClick={(e) => assignTasks(e)}>
             Assign those Tasks
           </button>
-          <button onClick={() => props.setAssignTrigger(false)}>Cancel</button>
+        </p>
+        {tasksAdded ? (
+          <div>
+            <h4>{RobotTasks.length} tasks have been added </h4>
+            <p>{RobotTasks[0].desc}</p>
+            <p>{RobotTasks[1].desc}</p>
+            <p>{RobotTasks[2].desc}</p>
+            <p>{RobotTasks[3].desc}</p>
+            <p>{RobotTasks[4].desc}</p>
+          </div>
+        ) : null}
+        <p>
+          <button id="btnChk" onClick={() => checkTasksAdded()}>
+            Check
+          </button>
+          <button id="close" onClick={() => props.setAssignTrigger(false)}>
+            Close
+          </button>
         </p>
       </div>
-    </form>
+    </div>
   ) : null;
 }
 
