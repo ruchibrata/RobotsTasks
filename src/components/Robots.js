@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import "../css/Robots.css";
+import RobotList from "./RobotList";
 
 const Robots = () => {
   const [robotName, setRobotName] = useState("");
@@ -16,8 +17,6 @@ const Robots = () => {
   };
 
   const addRobots = () => {
-    alert(robotName);
-    alert(roboType);
     setRobots([
       ...robots,
       {
@@ -26,14 +25,12 @@ const Robots = () => {
         type: roboType,
       },
     ]);
-    console.log(robots.length);
-    console.log("robots: ", robots);
   };
 
   return (
     <div className="container">
       <div className="addRobots">
-        <label htmlFor="robotName">Add the Robot Name:</label>
+        <label htmlFor="robotName">Give a name to the Robot :</label>
         <input
           type="text"
           name="robotName"
@@ -41,7 +38,7 @@ const Robots = () => {
           onChange={(e) => handleNameChange(e)}
         />
 
-        <label>Choose the Robot Types:</label>
+        <label>Choose the Robot Types :</label>
         <select value={roboType} onChange={(e) => handleTypeChange(e)}>
           <option value="Unipedal">UNIPEDAL</option>
           <option value="Bipedal">BIPEDAL</option>
@@ -52,28 +49,12 @@ const Robots = () => {
         </select>
 
         <button type="submit" onClick={addRobots}>
-          Add Robot
+          Create the Robot
         </button>
       </div>
-      <h2>Robot List</h2>
-      <div className="robotList">
-        <table id="roboTable">
-          <thead id="header">
-            <tr>
-              <th>Robot Name</th>
-              <th>Robot Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            {robots.map((robot) => (
-              <tr key={robot.id}>
-                <td> {robot.name} </td>
-                <td> {robot.type}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <h2>Avaiable Robot List</h2>
+
+      <RobotList robots={robots} />
     </div>
   );
 };

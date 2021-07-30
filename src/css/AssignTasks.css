@@ -1,0 +1,17 @@
+.assignTasks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 30%;
+  height: 50%;
+  border: 3px solid green;
+  background-color: bisque;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+h3 {
+  margin: 0;
+}
